@@ -60,12 +60,12 @@ open up you local host and port
 ##### cmd
 - mlflow ui
 
-### dagshub
+### Dagshub
 [dagshub](https://dagshub.com/)
 
-MLFLOW_TRACKING_URI=https://dagshub.com/alvin0727/End-To-End-ML-Project.mlflow \
-MLFLOW_TRACKING_USERNAME=alvin0727 \
-MLFLOW_TRACKING_PASSWORD=b9d019bd3526bf93e3920cc9bb1c502db1e8ff34 \
+MLFLOW_TRACKING_URI = https://dagshub.com/alvin0727/End-To-End-ML-Project.mlflow \
+MLFLOW_TRACKING_USERNAME = alvin0727 \
+MLFLOW_TRACKING_PASSWORD = b9d019bd3526bf93e3920cc9bb1c502db1e8ff34 \
 python script.py
 
 Run this to export as env variables:
