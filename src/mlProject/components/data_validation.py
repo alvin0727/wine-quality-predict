@@ -22,7 +22,7 @@ class DataValidation:
                     validation_status = False
                     break  
 
-            os.makedirs(os.path.dirname(self.config.STATUS_FILE), exist_ok=True)
+            os.makedirs(os.path.dirname(self.config.STATUS_FILE),  exist_ok=True)
 
             # Write the validation
             with open(self.config.STATUS_FILE, "w") as f:
