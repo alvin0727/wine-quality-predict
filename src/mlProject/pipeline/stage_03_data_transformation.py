@@ -4,7 +4,7 @@ from mlProject import logger
 from pathlib import Path
 
 
-STAGE_NAME = "Data Transformation stage"
+STAGE_NAME = "Data Transformation Stage"
 
 class DataTransformationTrainingPipeline:
     def __init__(self):

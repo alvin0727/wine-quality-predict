@@ -18,10 +18,7 @@ class DataTransformation:
         
         # Splitting the data into train and test sets
         train_set, test_set = train_test_split(data, test_size=0.2, random_state=42)
-        
-        # Createing the root directory if it doesn't exist
-        os.makedirs(self.config.root_dir, exist_ok=True)
-        
+    
         # Saving the train and test sets to csv files
         train_set.to_csv(os.path.join(self.config.root_dir, "train.csv"), index=False)
         test_set.to_csv(os.path.join(self.config.root_dir, "test.csv"), index=False)
