@@ -1,5 +1,12 @@
 # End-to-end-Machine-Learning-Project-with-MLflow
+![MLflow](https://img.shields.io/badge/MLflow-%23FF7F00.svg?style=for-the-badge&logo=mlflow&logoColor=white)
+![Python](https://img.shields.io/badge/python-3.10-blue.svg)
+![FastAPI](https://img.shields.io/badge/FastAPI-005571?style=for-the-badge&logo=fastapi)
+![Docker](https://img.shields.io/badge/docker-%230db7ed.svg?style=for-the-badge&logo=docker&logoColor=white)
 
+A complete ML pipeline with experiment tracking, model management, and deployment.
+
+[**REFERENCE**](https://github.com/entbappy/End-to-end-Machine-Learning-Project-with-MLflow)
 
 ## Workflows
 
@@ -15,78 +22,80 @@
 
 
 
-# How to run?
-### STEPS:
+## Setup Instructions
 
-Clone the repository
+### 1. Clone the repository
 
 ```bash
-https://github.com/alvin0727/End-To-End-ML-Project
+git clone https://github.com/alvin0727/End-To-End-ML-Project
+cd End-To-End-ML-Project
 ```
-### STEP 01- Create a conda environment after opening the repository
+
+### 2. Create and activate conda environment
 
 ```bash
 conda create -n mlproj python=3.10 -y
-```
-
-```bash
 conda activate mlproj
 ```
 
+### 3. Install dependencies
 
-### STEP 02- install the requirements
 ```bash
 pip install -r requirements.txt
 ```
 
-
-```bash
-# Finally run the following command
-python app.py
-```
-
-Now,
-```bash
-open up you local host and port
-```
-
-
-
-## MLflow
+### 4. Configure Environment
 
 [Documentation](https://mlflow.org/docs/latest/index.html)
 
+```python
+# MLflow Configuration
+MLFLOW_TRACKING_URI=https://dagshub.com/alvin0727/End-To-End-ML-Project.mlflow
+MLFLOW_TRACKING_USERNAME=your_username
+MLFLOW_TRACKING_PASSWORD=your_token
+```
 
-##### cmd
-- mlflow ui
-
-### Dagshub
-[dagshub](https://dagshub.com/)
-
-MLFLOW_TRACKING_URI = https://dagshub.com/alvin0727/End-To-End-ML-Project.mlflow \
-MLFLOW_TRACKING_USERNAME = alvin0727 \
-MLFLOW_TRACKING_PASSWORD = b9d019bd3526bf93e3920cc9bb1c502db1e8ff34 \
+```bash
 python script.py
-
-Run this to export as env variables:
-
-```bash
-
-export MLFLOW_TRACKING_URI=https://dagshub.com/alvin0727/End-To-End-ML-Project.mlflow 
-
-export MLFLOW_TRACKING_USERNAME=alvin0727 
-
-export MLFLOW_TRACKING_PASSWORD=b9d019bd3526bf93e3920cc9bb1c502db1e8ff34
-
 ```
 
-For windows:
+## 🚀 Running the Project
+
+### Option 1: Local Development
 
 ```bash
-$env:MLFLOW_TRACKING_URI = "https://dagshub.com/alvin0727/End-To-End-ML-Project.mlflow"
+# Run training pipeline
+python main.py
 
-$env:MLFLOW_TRACKING_USERNAME = "alvin0727"
-
-$env:MLFLOW_TRACKING_PASSWORD = "b9d019bd3526bf93e3920cc9bb1c502db1e8ff34"
-
+# Start FastAPI server
+python app.py
 ```
+
+### Option 2: Docker
+
+```bash
+# Build
+docker-compose build
+
+# Create
+docker-compose up -d 
+```
+
+### MLflow Tracking UI
+
+```bash
+mlflow ui --port 5000
+```
+
+### Pipeline Workflow
+
+1. **Trigger**: Runs on push to `main` branch (ignoring documentation/config changes)
+2. **Steps**:
+   - Checks out the code
+   - Verifies Docker/Docker Compose installation
+   - Builds Docker images
+   - Stops existing containers
+   - Deploys new containers
+   - Cleans up project-specific resources
+
+3. [**GitHub Runners**](https://docs.github.com/en/actions/hosting-your-own-runners/managing-self-hosted-runners/adding-self-hosted-runners)

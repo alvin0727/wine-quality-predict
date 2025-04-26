@@ -12,4 +12,5 @@ joblib
 types-pyYAML
 Flask
 Flask-Cors
+python-dotenv
 -e.  
