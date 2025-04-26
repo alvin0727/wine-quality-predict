@@ -1,0 +1,43 @@
+name: Local Docker Compose CI/CD
+
+on:
+  push:
+    branches:
+      - main
+    paths-ignore:
+      - 'README.md'
+      - 'docs/**'
+      - '**.md'
+
+jobs:
+  ci-cd:
+    name: Build, Test, and Deploy with Docker Compose
+    runs-on: self-hosted  # Menjalankan di mesin self-hosted
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Install Docker and Docker Compose (if not already installed)
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y docker.io docker-compose
+
+      - name: Build Docker images with Docker Compose
+        run: |
+          docker-compose build
+
+      - name: Run unit tests (inside container if needed)
+        run: |
+          docker-compose run --rm ml_app pytest
+
+      - name: Stop existing containers (if running)
+        run: |
+          docker-compose down
+
+      - name: Deploy new containers
+        run: |
+          docker-compose up -d
+
+      - name: Clean unused images and volumes
+        run: |
+          docker system prune -f
