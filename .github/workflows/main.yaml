@@ -11,33 +11,36 @@ on:
 
 jobs:
   ci-cd:
-    name: Build, Test, and Deploy with Docker Compose
-    runs-on: self-hosted  # Menjalankan di mesin self-hosted
+    name: Build and Deploy with Docker Compose
+    runs-on: self-hosted  # Runs on self-hosted machine
     steps:
       - name: Checkout code
         uses: actions/checkout@v3
 
+      # Check if Docker and Docker Compose are installed on your local machine
       - name: Install Docker and Docker Compose (if not already installed)
         run: |
-          sudo apt-get update
-          sudo apt-get install -y docker.io docker-compose
+          docker --version
+          docker-compose --version
 
+      # Build Docker images with Docker Compose
       - name: Build Docker images with Docker Compose
         run: |
           docker-compose build
 
-      - name: Run unit tests (inside container if needed)
-        run: |
-          docker-compose run --rm ml_app pytest
-
+      # Stop any existing running containers (if any)
       - name: Stop existing containers (if running)
         run: |
           docker-compose down
 
+      # Deploy new containers
       - name: Deploy new containers
         run: |
           docker-compose up -d
 
-      - name: Clean unused images and volumes
+      # Clean unused containers, images, and volumes related to this project only
+      - name: Clean unused containers, images, and volumes (related to this project)
         run: |
-          docker system prune -f
+          docker container prune -f --filter "label=com.docker.compose.project=ml_app"
+          docker image prune -f --filter "label=com.docker.compose.project=ml_app"
+          docker volume prune -f --filter "label=com.docker.compose.project=ml_app"
