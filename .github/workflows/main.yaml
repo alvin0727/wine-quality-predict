@@ -1,4 +1,4 @@
-name: ML Wine Quality Prediction CI/CD
+name: ML Wine Quality Prediction 
 
 on:
   push:
