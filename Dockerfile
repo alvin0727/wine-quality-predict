@@ -1,4 +1,4 @@
-FROM python:3.10-slim-buster
+FROM python:3.10-slim
 
 # Set environment variables
 ENV PYTHONDONTWRITEBYTECODE=1
@@ -13,6 +13,8 @@ RUN apt-get update \
         gcc \
         g++ \
         python3-dev \
+        curl \
+        ca-certificates \
     && rm -rf /var/lib/apt/lists/*
 
 # Copy requirements first for better caching
@@ -28,7 +30,7 @@ COPY . .
 # Create necessary directories if they don't exist
 RUN mkdir -p artifacts logs static templates
 
-# Expose port (adjust if your app uses a different port)
+# Expose port
 EXPOSE 5000
 
 # Create a non-root user for security
@@ -38,7 +40,7 @@ USER appuser
 
 # Health check
 HEALTHCHECK --interval=30s --timeout=30s --start-period=5s --retries=3 \
-    CMD curl -f http://localhost:5000/health || exit 1
+    CMD curl -f http://localhost:5000/health || curl -f http://localhost:5000/ || exit 1
 
 # Run the application
 CMD ["python3", "app.py"]
