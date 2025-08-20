@@ -8,7 +8,6 @@ on:
       - 'README.md'
       - 'docs/**'
       - '**.md'
-      - '.github/workflows/**'
 
 permissions:
   id-token: write
