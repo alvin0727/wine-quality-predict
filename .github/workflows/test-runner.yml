@@ -1,0 +1,19 @@
+name: Test Runner Connection
+
+on:
+  workflow_dispatch: # Manual trigger
+
+jobs:
+  test:
+    runs-on: wine-quality-ml
+    timeout-minutes: 5
+    steps:
+      - name: Test Basic Command
+        run: |
+          echo "Testing runner connection..."
+          whoami
+          pwd
+          date
+      
+      - name: Test Docker
+        run: docker --version
