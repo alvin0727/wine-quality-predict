@@ -77,9 +77,9 @@ jobs:
           docker push $ECR_REGISTRY/$ECR_REPOSITORY:latest
 
   deploy-to-ec2:
-    name: Deploy ML App to EC2
+    name: Deploy ML App to Ubuntu EC2
     needs: build-and-push-ecr-image
-    runs-on: self-hosted
+    runs-on: wine-quality-ml # Specify runner dengan label
     steps:
       - name: Configure AWS credentials
         uses: aws-actions/configure-aws-credentials@v4
@@ -95,8 +95,9 @@ jobs:
 
       - name: Set working directory for ML project
         run: |
-          mkdir -p /home/ubuntu/wine-quality-ml
-          cd /home/ubuntu/wine-quality-ml
+          sudo mkdir -p /home/ubuntu/wine-quality-ml/logs
+          sudo mkdir -p /home/ubuntu/wine-quality-ml/artifacts
+          sudo chown -R ubuntu:ubuntu /home/ubuntu/wine-quality-ml
 
       - name: Stop existing ML container
         run: |
@@ -110,7 +111,7 @@ jobs:
         run: |
           docker pull $ECR_REGISTRY/$ECR_REPOSITORY:wine-quality-latest
 
-      - name: Run new container
+      - name: Run new container on Ubuntu EC2
         env:
           ECR_REGISTRY: ${{ secrets.ECR_REGISTRY }}
           ECR_REPOSITORY: ${{ secrets.ECR_REPOSITORY_NAME }}
@@ -129,22 +130,33 @@ jobs:
             --health-timeout=10s \
             --health-retries=3 \
             --health-start-period=40s \
+            --label "project=wine-quality-ml" \
+            --label "owner=alvin0727" \
             $ECR_REGISTRY/$ECR_REPOSITORY:wine-quality-latest
 
       - name: Wait for container to start
         run: |
+          echo "Waiting for container to start..."
           sleep 40
 
       - name: Health check
         run: |
+          echo "Performing health check on Ubuntu EC2..."
           curl -f http://localhost:5001/health || curl -f http://localhost:5001/ || echo "Health check failed, but continuing..."
 
       - name: Show container status
         run: |
+          echo "=== Container Status ==="
           docker ps -a --filter name=wine-quality-ml-app
+          echo "=== Container Logs ==="
           docker logs wine-quality-ml-app --tail 20
+          echo "=== System Info ==="
+          uname -a
+          df -h
 
-      - name: Cleanup old images
+      - name: Cleanup old images (only ML project images)
         run: |
-          docker system prune -af --filter "until=24h"
+          echo "Cleaning up old ML images..."
+          docker image prune -af --filter "until=24h" --filter "label=project=wine-quality-ml"
           docker volume prune -f
+          echo "Cleanup completed"
