@@ -40,11 +40,11 @@ RUN mkdir -p artifacts logs static templates \
 USER appuser
 
 # Expose port
-EXPOSE 5000
+EXPOSE 8080
 
 # Health check
 HEALTHCHECK --interval=30s --timeout=30s --start-period=5s --retries=3 \
-    CMD curl -f http://localhost:5000/health || curl -f http://localhost:5000/ || exit 1
+    CMD curl -f http://localhost:8080/health || curl -f http://localhost:8080/ || exit 1
 
 # Run the application
 CMD ["python3", "app.py"]

@@ -119,13 +119,13 @@ jobs:
           docker run -d \
             --name wine-quality-ml-app \
             --restart unless-stopped \
-            -p 5001:5000 \
+            -p 5001:8080 \
             -v /home/ubuntu/wine-quality-ml/logs:/app/logs \
             -v /home/ubuntu/wine-quality-ml/artifacts:/app/artifacts \
             -e FLASK_ENV=production \
             -e FLASK_APP=app.py \
             -e PYTHONUNBUFFERED=1 \
-            --health-cmd="curl -f http://localhost:5000/health || curl -f http://localhost:5000/ || exit 1" \
+            --health-cmd="curl -f http://localhost:8080/health || curl -f http://localhost:8080/ || exit 1" \
             --health-interval=30s \
             --health-timeout=10s \
             --health-retries=3 \
